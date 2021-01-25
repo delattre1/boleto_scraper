@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<body>
+<table border = 1>
+	{% for conta in boletos %}
+		{% for key, value in conta.items() %}
+
+		<tr>
+		   <th> {{ key }} </th>
+		   <td> {{ value }} </td>
+		</tr>
+
+		{% endfor %}
+	{% endfor %}
+ </table>
+</body>
+</html>
