@@ -58,6 +58,7 @@ def see_mongo():
 @app.route('/contas')
 def show_contas():
     import pymongo
+    db_credential = get_credentials()
     client = pymongo.MongoClient(db_credential)
     db = client['teste']
     collection = db['collection_teste']
