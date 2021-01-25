@@ -3,10 +3,35 @@ import re
 from datetime import datetime
 
 
+def get_credentials():
+    import json
+
+    with open('.credentials.txt') as json_file:
+        data = json.load(json_file)
+        database_credential = data['database']
+    return database_credential
+
+
+def upload_to_db(path):
+    import pymongo
+    db_credential = get_credentials()
+    client = pymongo.MongoClient(db_credential)
+    db = client['teste']
+    collection = db['collection_teste']
+    valor, vencimento, codigo = get_data_from_boleto(path)
+    dados_boleto = {'Valor': valor, 'Vencimento': vencimento, 'Código': codigo}
+    try:
+        collection.insert_one(dados_boleto)
+        return 'successfully added to database '
+    except:
+        return 'some error ocurred '
+
+
 def get_data_from_boleto(path):
     palavras = load_pdf(path)
     data_vencimento, valor, codigo_pagamento = dados_boleto(palavras)
     return data_vencimento, valor, codigo_pagamento
+
 
 def load_pdf(path):
     with open(path, "rb") as f:
@@ -76,7 +101,24 @@ def dados_boleto(palavras):
                     continue
 
     data_vencimento = validate_dados(datas_vencimento)
-    valor = validate_dados(valores_boleto)
-    codigo_pagamento = (' ').join(codigo_de_barras).replace('.', ' ')
+    valor = 'R$ ' + str(validate_dados(valores_boleto))
+    code_bar = (' ').join(codigo_de_barras).replace('.', ' ')
+    codigo_pagamento = correct_bar_code(code_bar)
 
     return data_vencimento, valor, codigo_pagamento
+
+
+def correct_bar_code(codigo):
+    split = codigo.split()
+    without_spaces = ('').join(split)
+    tamanho_codigo = (len(without_spaces))
+
+    if tamanho_codigo == 47 or tamanho_codigo == 48:
+        return codigo
+
+    elif tamanho_codigo > 48 and tamanho_codigo < 53:
+        codigo_corrigido = (' '.join(split[1:]))
+        return codigo_corrigido
+
+    else:
+        return "falha na identificacao"

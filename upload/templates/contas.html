@@ -3,32 +3,36 @@
 <head>
 	<title>Titulo aqui</title>
 	<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='style.css')}}">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-<table class="styled-table">
-	<thead>
-		{% set conta = boletos[0] %}
-		<tr>
-		{% for key, value in conta.items() %}
-			{% if key != "_id" %}
-				<th> {{ key }} </th>
-			{% endif %}
-		{% endfor %}
-		</tr>
-	</thead>
 
-	<tbody>
-	{% for conta in boletos %}
-		<tr>
-		{% for k,v in conta.items() %}
-			{% if k != "_id" %}
-			<td> {{v}} </td>
-			{% endif %}
+<div class="container-table">
+	<table class="styled-table">
+		<thead>
+			{% set conta = boletos[0] %}
+			<tr>
+			{% for key, value in conta.items() %}
+				{% if key != "_id" %}
+					<th> {{ key }} </th>
+				{% endif %}
+			{% endfor %}
+			</tr>
+		</thead>
+
+		<tbody>
+		{% for conta in boletos %}
+			<tr>
+			{% for k,v in conta.items() %}
+				{% if k != "_id" %}
+				<td> {{v}} </td>
+				{% endif %}
+			{% endfor %}
+			</tr>
 		{% endfor %}
-		</tr>
-	{% endfor %}
-	</tbody>
-</table>
+		</tbody>
+	</table>
+</div>
 
 </body>
 </html>
