@@ -60,20 +60,26 @@ def is_float(val):
 
 
 def validate_dados(lista):
-    is_equal = True
-    for i in range(len(lista) - 1):
-        data1 = lista[i]
-        data2 = lista[i+1]
+    if len(lista) > 1:
+        is_equal = True
+        for i in range(len(lista) - 1):
+            data1 = lista[i]
+            data2 = lista[i+1]
 
-        if data1 == data2:
-            continue
+            if data1 == data2:
+                continue
+            else:
+                is_equal = False
+
+        if is_equal:
+            return data1
         else:
-            is_equal = False
+            return "not equal"
+    elif len(lista) == 1:
+        return lista[0]
 
-    if is_equal:
-        return data1
     else:
-        return "not equal"
+        return "Failed to get data"
 
 
 def dados_boleto(palavras):
